@@ -130,9 +130,16 @@ export default class extends Component {
         rootTag: screenElement,
       })
     } catch (e) {
-      const message = this.buildErrorMessage(e)
-      this.throwError(message)
-      this.props.onError(e)
+      if (e.message === "Cannot read property 'getHostNode' of null") {
+        // We need to reload since we got in a bad state with react
+        // This is a bit of a hack
+        this.resetApplication()
+        this.refs.root.innerHTML = ''
+        this.runApplication(code)
+      }
+        const message = this.buildErrorMessage(e)
+        this.throwError(message)
+        this.props.onError(e)
     }
   }
 

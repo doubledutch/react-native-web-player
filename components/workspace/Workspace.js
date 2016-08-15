@@ -84,6 +84,7 @@ export default class extends Component {
     this.onPlayerRun = this.onPlayerRun.bind(this)
     this.onPlayerError = this.onPlayerError.bind(this)
     this.onBabelWorkerMessage = this.onBabelWorkerMessage.bind(this)
+    this.timeout = undefined
     babelWorker.addEventListener("message", this.onBabelWorkerMessage)
   }
 
@@ -131,7 +132,13 @@ export default class extends Component {
   }
 
   onCodeChange(value) {
-    babelWorker.postMessage(value)
+    // Use timeouts for code-change to prevent churn
+    if (this.timeout) { clearTimeout(this.timeout) }
+    this.timeout = setTimeout(() => {
+      babelWorker.postMessage(value)
+      this.timeout = undefined
+    }, 250)
+
     this.props.onChange(value)
   }
 
