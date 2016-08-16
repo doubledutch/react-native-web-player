@@ -3,6 +3,12 @@
 export const getHashString = () => {
   var params = {}
   var hash = window.location.hash.substring(1)
+  
+  if (!hash || !hash.length) {
+    if (window.location.search.length > 1) {
+      hash = window.location.search.substr(1)
+    }
+  }
 
   if (hash.length === 0) {
     return params
