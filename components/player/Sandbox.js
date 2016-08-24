@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import Update from 'react-addons-update'
 import ReactNative, { AppRegistry } from 'react-native-web'
 import pureRender from 'pure-render-decorator'
 import VendorComponents from './VendorComponents'
@@ -15,6 +16,8 @@ const _require = (assetRoot = '', name) => {
     return ReactNative
   } else if (name === 'react') {
     return React
+  } else if (name == 'react-addons-update') {
+    return Update
   // Resolve local asset paths
   } else if (name.match(/^\.{1,2}\//)) {
     if (! assetRoot.match(/\/$/)) {
@@ -116,6 +119,14 @@ export default class extends Component {
     }), '*')
   }
 
+  signalSuccess(message) {
+    parent.postMessage(JSON.stringify({
+      id: this.props.id,
+      type: 'success',
+      payload: message,
+    }), '*')
+  }
+
   runApplication(code) {
     const screenElement = this.refs.root
 
@@ -129,6 +140,8 @@ export default class extends Component {
       AppRegistry.runApplication(APP_NAME, {
         rootTag: screenElement,
       })
+
+      this.signalSuccess(code)
     } catch (e) {
       if (e.message === "Cannot read property 'getHostNode' of null") {
         // We need to reload since we got in a bad state with react

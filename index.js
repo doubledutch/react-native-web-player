@@ -25,7 +25,7 @@ const {
   width = '210',
   scale = '1',
   assetRoot = '',
-  vendorComponents = '[]'
+  vendorComponents = '[]',
 } = getHashString()
 
 const root = (

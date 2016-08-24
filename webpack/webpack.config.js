@@ -1,5 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
+//const Dashboard = require('webpack-dashboard');
+//const DashboardPlugin = require('webpack-dashboard/plugin');
+//const dashboard = new Dashboard();
 
 const DIRECTORY = path.dirname(__dirname)
 
@@ -50,5 +53,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin("vendor", "vendor-bundle.js"),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin()
+//,
+//    new DashboardPlugin(dashboard.setData)
   ]
 }

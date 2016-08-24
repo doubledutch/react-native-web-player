@@ -69,7 +69,7 @@ export default class extends Component {
     scale: null,
     width: null,
     assetRoot: null,
-    vendorComponents: []
+    vendorComponents: [],
   }
 
   constructor(props) {
@@ -83,7 +83,9 @@ export default class extends Component {
     this.onToggleDetails = this.onToggleDetails.bind(this)
     this.onPlayerRun = this.onPlayerRun.bind(this)
     this.onPlayerError = this.onPlayerError.bind(this)
+    this.onPlayerSuccess = this.onPlayerSuccess.bind(this)
     this.onBabelWorkerMessage = this.onBabelWorkerMessage.bind(this)
+    this.postParentCode = () => {}
     this.timeout = undefined
     babelWorker.addEventListener("message", this.onBabelWorkerMessage)
   }
@@ -139,6 +141,7 @@ export default class extends Component {
       this.timeout = undefined
     }, 250)
 
+    this.postParentCode = (message) => parent.postMessage({ type: 'codechange', code: value, compiled: message }, '*')
     this.props.onChange(value)
   }
 
@@ -152,6 +155,11 @@ export default class extends Component {
 
   onPlayerError(message) {
     this.setState({runtimeError: getErrorDetails(message)})
+  }
+
+  onPlayerSuccess(message) {
+      // Send a message to the parent
+      this.postParentCode(message)
   }
 
   render() {
@@ -207,6 +215,7 @@ export default class extends Component {
             vendorComponents={vendorComponents}
             onRun={this.onPlayerRun}
             onError={this.onPlayerError}
+            onSuccess={this.onPlayerSuccess}
           />
         </div>
       </div>

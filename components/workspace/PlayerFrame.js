@@ -51,7 +51,7 @@ export default class extends Component {
       if (id !== this.state.id) {
         return
       }
-
+      
       switch (type) {
         case 'ready':
           this.status = 'ready'
@@ -62,6 +62,9 @@ export default class extends Component {
         break
         case 'error':
           this.props.onError(payload)
+        break
+        case 'success':
+          this.props.onSuccess(payload)
         break
       }
     })
