@@ -60,6 +60,7 @@ export default class extends Component {
             this.code = null
           }
         break
+        case 'warning':
         case 'error':
           this.props.onError(payload)
         break

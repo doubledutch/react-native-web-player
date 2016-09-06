@@ -119,6 +119,14 @@ export default class extends Component {
     }), '*')
   }
 
+  throwWarning(message) {
+    parent.postMessage(JSON.stringify({
+      id: this.props.id,
+      type: 'warning',
+      payload: message,
+    }), '*')
+  }
+
   signalSuccess(message) {
     parent.postMessage(JSON.stringify({
       id: this.props.id,
@@ -134,7 +142,16 @@ export default class extends Component {
 
     this.props.onRun()
 
+    var hasError = false
+    const consoleError = console.error
     try {
+      // Hook react error handling to surface messages to the UI
+      console.error = (msg) => {
+        consoleError(msg)
+        this.throwWarning(msg)
+        hasError = true
+      };
+
       this.evaluate(code)
 
       AppRegistry.runApplication(APP_NAME, {
@@ -149,10 +166,15 @@ export default class extends Component {
         this.resetApplication()
         this.refs.root.innerHTML = ''
         this.runApplication(code)
+      } else {
+        if (!hasError) {
+          const message = this.buildErrorMessage(e)
+          this.throwError(message)
+          this.props.onError(e)
+        }
       }
-        const message = this.buildErrorMessage(e)
-        this.throwError(message)
-        this.props.onError(e)
+    } finally {
+      console.error = consoleError
     }
   }
 
