@@ -1,15 +1,12 @@
 export default {
-  '1. Data' : '',
-  '2. Style' : `
-import React, { Component, } from 'react';
+  '1. Imports' : `import React, { Component, } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-
-const styles = StyleSheet.create({
+} from 'react-native';`,
+  '2. Style' : `const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -22,9 +19,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });`,
-'3. Code' : `
-
-class App extends Component {
+'3. Code' : `class App extends Component {
   render() {
     return (
       <View style={styles.container}>

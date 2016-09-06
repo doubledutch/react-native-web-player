@@ -196,7 +196,7 @@ class Workspace extends Component {
     if (keys.length > 0) {
       for (var i = 0; i < keys.length; ++i) {
         var key = keys[i]
-        if (error.lineNumber > this.state.lineCounts[key]) {
+        if (error.lineNumber >= this.state.lineCounts[key]) {
           error.lineNumber = error.lineNumber - this.state.lineCounts[key]
         } else {
           // error is in this section
