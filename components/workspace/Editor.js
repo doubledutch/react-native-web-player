@@ -4,6 +4,8 @@ import pureRender from 'pure-render-decorator'
 import { options, requireAddons } from '../../utils/CodeMirror'
 import { prefixObject } from '../../utils/PrefixInlineStyles'
 
+const codemirror = require('codemirror')
+
 require("../../node_modules/codemirror/lib/codemirror.css")
 require("../../styles/codemirror-theme.css")
 
@@ -13,7 +15,6 @@ require("../../styles/codemirror-theme.css")
 const styles = prefixObject({
   editorContainer: {
     display: 'flex',
-    position: 'relative',
     flex: '1',
     minWidth: 0,
     minHeight: 0,
@@ -42,9 +43,9 @@ export default class extends Component {
     if (typeof navigator !== 'undefined') {
       requireAddons()
 
-      const {value, onChange} = this.props
+      const {value, onChange, onCursor} = this.props
 
-      this.cm = require('codemirror')(
+      this.cm = codemirror(
         this.refs.editor,
         {
           ...options,
@@ -55,12 +56,15 @@ export default class extends Component {
       this.cm.on('changes', (cm) => {
         onChange(cm.getValue())
       })
+      this.cm.on('cursorActivity', (cm) => {
+        onCursor(cm.getCursor(), cm.getSelection())
+      })
     }
   }
 
   componentWillUpdate(nextProps) {
-    const {errorLineNumber: nextLineNumber} = nextProps
-    const {errorLineNumber: prevLineNumber} = this.props
+    const {errorLineNumber: nextLineNumber, value: nextCode, cursorPos: nextCursor, selectionPos: nextSelection} = nextProps
+    const {errorLineNumber: prevLineNumber, value: prevCode, cursorPos: prevCursor} = this.props
 
     if (this.cm) {
       if (typeof prevLineNumber === 'number') {
@@ -69,6 +73,25 @@ export default class extends Component {
 
       if (typeof nextLineNumber === 'number') {
         this.cm.addLineClass(nextLineNumber, "background", "cm-line-error")
+      }
+
+      if (nextCode !== prevCode) {
+        //this.cm.setValue(nextCode)
+      }
+
+      // if (nextCursor && nextSelection) {
+      //   this.cm.setCursor(nextCursor)
+      //   this.cm.setSelection(nextSelection)
+      // }
+    }
+  }
+
+  componentDidUpdate() {
+    const {errorLineNumber: nextLineNumber, value: nextCode, cursorPos: nextCursor, selectionPos: nextSelection} = this.props
+    if (this.cm) {
+      if (nextCursor && nextSelection) {
+        this.cm.setCursor(nextCursor)
+        this.cm.setSelection(nextSelection)
       }
     }
   }

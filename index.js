@@ -26,6 +26,8 @@ const {
   scale = '1',
   assetRoot = '',
   vendorComponents = '[]',
+  codeSplitEnabled = null,
+  codePreprocessEnabled = null
 } = getHashString()
 
 const root = (
@@ -39,6 +41,8 @@ const root = (
       width={parseFloat(width)}
       vendorComponents={JSON.parse(vendorComponents)}
       onChange={setHashString}
+      codeSplitEnabled={codeSplitEnabled}
+      codePreprocessEnabled={codePreprocessEnabled}
     />
   </div>
 )
