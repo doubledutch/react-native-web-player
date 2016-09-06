@@ -13,3 +13,43 @@ html, body, #react-root {
   width: 100%;
   height: 100%;
 }
+
+.sectionButton {
+    display: inline-block;
+    border-radius: 5px;
+    height: 30px;
+    min-width: 140px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    position: relative;
+    padding: 3px;
+    background-color: #E0E1E2;
+}
+
+.sectionButton.selected {
+  background-color: #1279c6;
+  color: white;
+}
+
+.sectionLeft {
+  position: absolute;
+  display: inline-block;
+  text-align: left;
+  left: 4px
+}
+
+.sectionRight {
+  position: absolute;
+  display: inline-block;
+  text-align: right;
+  right: 4px
+}
+
+.sectionButton.error {
+    background-color: rgb(201, 44, 44);
+    font-weight: 400;
+    color: white;
+}

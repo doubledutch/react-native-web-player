@@ -77,21 +77,6 @@ const styles = prefixObject({
     marginLeft: '5px',
     marginRight: '5px',
     position: 'relative'
-  },
-  sectionSelected: {
-    backgroundColor: '#ccc'
-  },
-  sectionLeft: {
-    position: 'absolute',
-    display: 'inline-block',
-    textAlign: 'left',
-    left: '2px'
-  },
-  sectionRight: {
-    position: 'absolute',
-    display: 'inline-block',
-    textAlign: 'right',
-    right: '2px'
   }
 })
 
@@ -208,7 +193,7 @@ class Workspace extends Component {
     const keys = Object.keys(this.state.sections)
 
     // If we have multiple keys, our line numbers will be off
-    if (keys.length > 1) {
+    if (keys.length > 0) {
       for (var i = 0; i < keys.length; ++i) {
         var key = keys[i]
         if (error.lineNumber > this.state.lineCounts[key]) {
@@ -216,12 +201,9 @@ class Workspace extends Component {
         } else {
           // error is in this section
           error.section = key
-          debugger
           break
         }
       }
-
-    debugger
     }
 
     return error
@@ -389,12 +371,19 @@ class Workspace extends Component {
           { multiSection &&
           <div>
             {Object.keys(sections).map((s, idx) => {
-              var style = Object.assign({}, styles.section, idx === selectedSection ? styles.sectionSelected : {})
+              var className = "sectionButton"
+              if (idx === selectedSection) {
+                className += " selected"
+              }
+              
+              if (isError && error.section === s) {
+                className += " error"
+              }
               return (
-                <div style={style} key={s} onClick={() => this.setState({ selectedSection: idx }) }>
-                  <span style={styles.sectionLeft} onClick={this.onMoveSectionLeft.bind(this, idx)}>◀︎</span>
+                <div className={className} key={s} onClick={() => this.setState({ selectedSection: idx }) }>
+                  <span className="sectionLeft" onClick={this.onMoveSectionLeft.bind(this, idx)}>◀︎</span>
                   <span>{s}</span>
-                  <span style={styles.sectionRight} onClick={this.onMoveSectionRight.bind(this, idx)}>▶</span>
+                  <span className="sectionRight" onClick={this.onMoveSectionRight.bind(this, idx)}>▶</span>
                 </div>
               )
             })}
